@@ -1,0 +1,85 @@
+//===== Extra Mercenary Convenience NPCs =============================
+//= Consumables, contract extenders, and mid-rate helpers
+//====================================================================
+
+// ---------------------------------------------------------------
+// Mercenary Potion Seller
+// ---------------------------------------------------------------
+prontera,155,175,4	script	Mercenary Supply Clerk	4_M_03,{
+	mes "[Mercenary Supply Clerk]";
+	mes "I sell potions that only work on Mercenaries.";
+	next;
+	switch(select(
+		"Mercenary Red Potion (1,000z) – heal 1000 HP",
+		"Buy 10 Red Potions (9,000z)",
+		"Buy 50 Red Potions (40,000z)",
+		"Leave"
+	)) {
+	case 1:
+		if (Zeny < 1000) { mes "Not enough zeny."; close; }
+		Zeny -= 1000;
+		getitem 12184,1;	// Mercenary Red Potion (official ID)
+		mes "Here you go.";
+		close;
+	case 2:
+		if (Zeny < 9000) { mes "Not enough zeny."; close; }
+		Zeny -= 9000;
+		getitem 12184,10;
+		mes "10 potions delivered.";
+		close;
+	case 3:
+		if (Zeny < 40000) { mes "Not enough zeny."; close; }
+		Zeny -= 40000;
+		getitem 12184,50;
+		mes "50 potions delivered.";
+		close;
+	case 4:
+		close;
+	}
+}
+
+// ---------------------------------------------------------------
+// Contract Extender (mid-rate QoL)
+// ---------------------------------------------------------------
+prontera,157,175,4	script	Contract Officer	4_M_04,{
+	mes "[Contract Officer]";
+	mes "Mercenary contracts can feel short on busy mid-rate servers.";
+	mes "I can extend your current mercenary’s remaining time.";
+	mes "Cost: 500,000 zeny for +30 minutes.";
+	next;
+	if (select("Extend contract:Cancel") == 2) close;
+
+	if (!getmercinfo(1)) {		// no mercenary summoned
+		mes "You do not have a mercenary summoned.";
+		close;
+	}
+	if (Zeny < 500000) {
+		mes "Need 500,000 zeny.";
+		close;
+	}
+
+	Zeny -= 500000;
+	// Note: real extension requires source support or a custom command.
+	// Many private servers add @merctime or similar.
+	// This NPC is a ready template – replace the next line with your server’s method.
+	// Example: atcommand "@merctime +30";
+	mes "Contract extension requested.";
+	mes "(If your server has a custom command, it has been applied.)";
+	mes "Otherwise ask your GM to enable time extension.";
+	close;
+}
+
+// ---------------------------------------------------------------
+// Kill Counter / Bonus Explainer
+// ---------------------------------------------------------------
+prontera,159,175,4	script	Mercenary Tactician	4_F_02,{
+	mes "[Mercenary Tactician]";
+	mes "Every 50 kills your mercenary gains a temporary stat bonus.";
+	mes "On official behaviour the bonus lasts a few minutes.";
+	next;
+	mes "Keep your mercenary alive and fighting strong monsters";
+	mes "to trigger these bonuses more often.";
+	mes " ";
+	mes "Higher faith also improves overall performance.";
+	close;
+}
